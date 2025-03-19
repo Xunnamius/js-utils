@@ -6,19 +6,28 @@
 
 # Function: safeDeepClone()
 
-> **safeDeepClone**\<`T`\>(`value`): `T`
+> **safeDeepClone**\<`T`\>(`value`, `options`?): `T`
 
-Defined in: [src/index.ts:18](https://github.com/Xunnamius/js-utils/blob/5e45a12a45c848fd3d640a7003637314d339710f/src/index.ts#L18)
+Defined in: [src/index.ts:44](https://github.com/Xunnamius/js-utils/blob/eddb7ad9b42011d6d69c174f61898936786b9325/src/index.ts#L44)
 
-A smarter more useful cloning algorithm based on the "structured clone"
-algorithm that accepts any `value` and clones it, passing through as-is
-whatever cannot be cloned (including `value` itself, if it cannot be cloned).
+A smarter more useful cloning algorithm loosely based on the [structured
+clone
+algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone)
+that creates a **deep copy** or "clone" of _any `value`_ (including, for
+instance, functions), passing through as-is anything that cannot be cloned.
+If `value` itself cannot be cloned, it will similarly be returned as-is.
+Cloning objects containing circular references is also supported.
 
-Unlike `structuredClone` or similar solutions, this function is guaranteed
-never to throw nor return a value that cannot stand in for `value`.
+Like `structuredClone`, this function also accepts an array of so-called
+"transferable objects" that, when encountered, will be copied-by-reference
+rather than cloned.
+
+Unlike `structuredClone` (or similar solutions), this function is guaranteed
+never to throw and never to return a value that cannot stand in for `value`.
 
 Note that all own enumerable properties (such as string keys) _and
-non-enumerable symbols_ will be recursively cloned.
+non-enumerable symbols_ will be recursively cloned. However, non-symbol
+non-enumerable properties will be ignored.
 
 ## Type Parameters
 
@@ -31,6 +40,10 @@ non-enumerable symbols_ will be recursively cloned.
 ### value
 
 `T`
+
+### options?
+
+[`SafeDeepCloneOptions`](../type-aliases/SafeDeepCloneOptions.md)
 
 ## Returns
 
