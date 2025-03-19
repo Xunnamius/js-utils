@@ -50,6 +50,18 @@ describe('::safeDeepClone', () => {
     expect(safeDeepClone(empty)).not.toBe(empty);
   });
 
+  it('clones object-like target', async () => {
+    expect.hasAssertions();
+
+    const target = new Map([
+      ['a', 1],
+      ['b', 5]
+    ]);
+
+    expect(safeDeepClone(target)).toStrictEqual(target);
+    expect(safeDeepClone(target)).not.toBe(target);
+  });
+
   it('clones object containing only a symbol', async () => {
     expect.hasAssertions();
 
