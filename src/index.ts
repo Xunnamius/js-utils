@@ -18,7 +18,7 @@ export type SafeDeepCloneOptions = {
    * - Using `transfer` will never result in the modification of `value` nor the
    *   removal of any of its properties
    */
-  transfer: unknown[];
+  transfer?: unknown[];
 };
 
 /**
