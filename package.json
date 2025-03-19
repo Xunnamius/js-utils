@@ -75,16 +75,20 @@
   "dependencies": {
     "core-js": "^3.41.0",
     "lodash.clone": "^4.5.0",
-    "lodash.clonedeep": "^4.5.0",
+    "lodash.clonedeepwith": "^4.5.0",
     "toss-expression": "^0.1.2"
   },
   "devDependencies": {
     "@-xun/fs": "^1.0.0",
     "@-xun/symbiote": "^3.4.1",
     "@types/lodash.clone": "^4.5.9",
-    "@types/lodash.clonedeep": "^4.5.9",
+    "@types/lodash.clonedeepwith": "^4.5.9",
     "rejoinder": "^1.2.5"
   },
+  "bundleDependencies": [
+    "lodash.clone",
+    "lodash.clonedeepwith"
+  ],
   "engines": {
     "node": "^18.20.0 || ^20.18.0 || ^22.12.0 || >=23.3.0"
   },

@@ -71,4 +71,43 @@ describe('::safeDeepClone', () => {
     expect(safeDeepClone(hasSymbol)[$symbol]).toBe($symbol);
     expect(safeDeepClone(hasSymbol)).not.toBe(hasSymbol);
   });
+
+  it('clones object with circular references', async () => {
+    expect.hasAssertions();
+
+    const circular = { a: 1, b: true, self: {}, self2: { self: {} } };
+    circular.self = circular;
+    circular.self2.self = circular.self2;
+
+    // ? Ensure safeDeepClone isn't changing stuff in the original object
+    Object.freeze(circular);
+
+    expect(safeDeepClone(circular)).not.toBe(circular);
+    expect(safeDeepClone(circular).a).toBe(1);
+    expect(safeDeepClone(circular).b).toBeTrue();
+    expect(safeDeepClone(circular).self).toBe(circular);
+    expect(safeDeepClone(circular).self2.self).toBe(circular.self2);
+  });
+
+  it('clones object with respect to options.transfer', async () => {
+    expect.hasAssertions();
+
+    const circular = { a: 1, b: true, self: {}, self2: { self: {} } };
+    circular.self = circular;
+    circular.self2.self = circular.self2;
+
+    const target = { [$symbol]: { state: { x: 'one', circular } }, y: false };
+
+    // ? Ensure safeDeepClone isn't changing stuff in the original objects
+    Object.freeze(circular);
+    Object.freeze(target);
+
+    const clone = safeDeepClone(target, { transfer: [circular] });
+
+    expect(clone).not.toBe(target);
+    expect(clone.y).toBeFalse();
+    expect(clone[$symbol].state.x).toBe('one');
+    expect(clone[$symbol].state).not.toBe(target[$symbol].state);
+    expect(clone[$symbol].state.circular).toBe(circular);
+  });
 });

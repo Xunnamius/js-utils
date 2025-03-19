@@ -1,31 +1,80 @@
 import clone from 'lodash.clone';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeepWith from 'lodash.clonedeepwith';
 
 export * from 'toss-expression';
 
 /**
- * A smarter more useful cloning algorithm based on the "structured clone"
- * algorithm that accepts any `value` and clones it, passing through as-is
- * whatever cannot be cloned (including `value` itself, if it cannot be cloned).
+ * @see {@link safeDeepClone}
+ */
+export type SafeDeepCloneOptions = {
+  /**
+   * An array of values that, if encountered, will be copied-by-reference rather
+   * than cloned. This is useful when `value` contains references to objects
+   * that should not be cloned but instead transferred as-is.
+   *
+   * Unlike `structuredClone`:
+   *
+   * - Any value can be transferred (strict comparison is used)
+   * - Using `transfer` will never result in the modification of `value` nor the
+   *   removal of any of its properties
+   */
+  transfer: unknown[];
+};
+
+/**
+ * A smarter more useful cloning algorithm loosely based on the [structured
+ * clone
+ * algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone)
+ * that creates a **deep copy** or "clone" of _any `value`_ (including, for
+ * instance, functions), passing through as-is anything that cannot be cloned.
+ * If `value` itself cannot be cloned, it will similarly be returned as-is.
+ * Cloning objects containing circular references is also supported.
  *
- * Unlike `structuredClone` or similar solutions, this function is guaranteed
- * never to throw nor return a value that cannot stand in for `value`.
+ * Like `structuredClone`, this function also accepts an array of so-called
+ * "transferable objects" that, when encountered, will be copied-by-reference
+ * rather than cloned.
+ *
+ * Unlike `structuredClone` (or similar solutions), this function is guaranteed
+ * never to throw and never to return a value that cannot stand in for `value`.
  *
  * Note that all own enumerable properties (such as string keys) _and
- * non-enumerable symbols_ will be recursively cloned.
+ * non-enumerable symbols_ will be recursively cloned. However, non-symbol
+ * non-enumerable properties will be ignored.
  */
-// TODO: consider replacing lodash imports with structuredClone itself
-export function safeDeepClone<T>(value: T): T {
+export function safeDeepClone<T>(value: T, options?: SafeDeepCloneOptions): T {
+  const { transfer = [] } = options || {};
+
+  const referenceTracker = new Set();
+  const referencesToTransfer = new Set(transfer);
+
   const attempt = clone(value);
 
   if (isEmptyObject(attempt) && !isEmptyObject(value)) {
+    // ? If we reached this point, it was `value` could not be cloned
     return value;
   }
 
   // ? cloneDeep already passes through what cannot be cloned so long as it was
   // ? a property of an object that was passed in, so we only need to account
-  // ? for the clone-ability of `value` itself (which we do above)
-  return cloneDeep(value);
+  // ? for the clone-ability of `value` itself (which we do above) and handle
+  // ? circular/transferable references (which we do below)
+
+  return cloneDeepWith(value, (value_: unknown) => {
+    if (referencesToTransfer.has(value_)) {
+      // ? User doesn't want this value cloned, just return it
+      return value_;
+    }
+
+    if (referenceTracker.has(value_)) {
+      // ? We've seen this value before, probably a circular ref, just return it
+      return value_;
+    }
+
+    referenceTracker.add(value_);
+
+    // ? Let lodash handle it from here
+    return undefined;
+  });
 }
 
 function isEmptyObject(o: unknown) {
