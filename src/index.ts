@@ -77,6 +77,29 @@ export function safeDeepClone<T>(value: T, options?: SafeDeepCloneOptions): T {
   });
 }
 
+/**
+ * This function returns a **shallow copy** or "clone" of _any `value`_
+ * (including, for instance, functions). If `value` cannot be cloned, it will be
+ * returned as-is.
+ *
+ * This function is guaranteed never to throw and never to return a value that
+ * cannot stand in for `value`.
+ *
+ * The difference between this function and using an object spread or
+ * `Object.assign()` is that all own enumerable properties (such as string keys)
+ * _and non-enumerable symbols_ will included in the clone. However, non-symbol
+ * non-enumerable properties will be ignored.
+ */
+export function safeShallowClone<T>(value: T): T {
+  const attempt = clone(value);
+
+  if (isEmptyObject(attempt) && !isEmptyObject(value)) {
+    return value;
+  }
+
+  return attempt;
+}
+
 function isEmptyObject(o: unknown) {
   if (!o || typeof o !== 'object') {
     return false;

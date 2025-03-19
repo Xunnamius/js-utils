@@ -1,6 +1,6 @@
 // * These tests ensure the exported interfaces under test function as expected.
 
-import { safeDeepClone } from 'universe';
+import { safeDeepClone, safeShallowClone } from 'universe';
 
 const $symbol = Symbol('symbol');
 
@@ -109,5 +109,47 @@ describe('::safeDeepClone', () => {
     expect(clone[$symbol].state.x).toBe('one');
     expect(clone[$symbol].state).not.toBe(target[$symbol].state);
     expect(clone[$symbol].state.circular).toBe(circular);
+  });
+});
+
+describe('::safeShallowClone', () => {
+  it('shallow clones all enumerable own properties and non-enumerable symbols', async () => {
+    expect.hasAssertions();
+
+    const target = {
+      [$symbol]: { [$symbol]: { a: { b: 'c' } } },
+      d: 1,
+      e: function () {
+        return 'f';
+      },
+      g: { h: true }
+    };
+
+    expect(safeShallowClone(target)).toStrictEqual(target);
+    expect(safeShallowClone(target)).not.toBe(target);
+
+    expect(safeShallowClone(target).e).toBe(target.e);
+    expect(safeShallowClone(target).g).toBe(target.g);
+
+    expect(safeShallowClone(target)[$symbol]).toBe(target[$symbol]);
+    expect(safeShallowClone(target)[$symbol][$symbol].a).toBe(
+      target[$symbol][$symbol].a
+    );
+
+    expect(safeShallowClone(target)[$symbol][$symbol].a.b).toBe(
+      target[$symbol][$symbol].a.b
+    );
+  });
+
+  it('clones non-cloneable top-level values directly', async () => {
+    expect.hasAssertions();
+
+    const bigInt = 55n;
+    const fn = function () {
+      return 'fn';
+    };
+
+    expect(safeShallowClone(bigInt)).toBe(bigInt);
+    expect(safeShallowClone(fn)).toBe(fn);
   });
 });
