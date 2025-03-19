@@ -8,7 +8,7 @@
 
 > **safeDeepClone**\<`T`\>(`value`, `options`?): `T`
 
-Defined in: [src/index.ts:44](https://github.com/Xunnamius/js-utils/blob/eddb7ad9b42011d6d69c174f61898936786b9325/src/index.ts#L44)
+Defined in: [src/index.ts:44](https://github.com/Xunnamius/js-utils/blob/3df40ccd18d5b4088869d50725b32981f4bd1c30/src/index.ts#L44)
 
 A smarter more useful cloning algorithm loosely based on the [structured
 clone

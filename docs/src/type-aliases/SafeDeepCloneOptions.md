@@ -8,7 +8,7 @@
 
 > **SafeDeepCloneOptions** = `object`
 
-Defined in: [src/index.ts:9](https://github.com/Xunnamius/js-utils/blob/eddb7ad9b42011d6d69c174f61898936786b9325/src/index.ts#L9)
+Defined in: [src/index.ts:9](https://github.com/Xunnamius/js-utils/blob/3df40ccd18d5b4088869d50725b32981f4bd1c30/src/index.ts#L9)
 
 ## See
 
@@ -16,11 +16,11 @@ Defined in: [src/index.ts:9](https://github.com/Xunnamius/js-utils/blob/eddb7ad9
 
 ## Properties
 
-### transfer
+### transfer?
 
-> **transfer**: `unknown`[]
+> `optional` **transfer**: `unknown`[]
 
-Defined in: [src/index.ts:21](https://github.com/Xunnamius/js-utils/blob/eddb7ad9b42011d6d69c174f61898936786b9325/src/index.ts#L21)
+Defined in: [src/index.ts:21](https://github.com/Xunnamius/js-utils/blob/3df40ccd18d5b4088869d50725b32981f4bd1c30/src/index.ts#L21)
 
 An array of values that, if encountered, will be copied-by-reference rather
 than cloned. This is useful when `value` contains references to objects
