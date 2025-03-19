@@ -1,6 +1,8 @@
 import clone from 'lodash.clone';
 import cloneDeep from 'lodash.clonedeep';
 
+export * from 'toss-expression';
+
 /**
  * A smarter more useful cloning algorithm based on the "structured clone"
  * algorithm that accepts any `value` and clones it, passing through as-is
