@@ -8,7 +8,7 @@
 
 > **safeShallowClone**\<`T`\>(`value`): `T`
 
-Defined in: [src/index.ts:93](https://github.com/Xunnamius/js-utils/blob/3df40ccd18d5b4088869d50725b32981f4bd1c30/src/index.ts#L93)
+Defined in: [src/index.ts:93](https://github.com/Xunnamius/js-utils/blob/30e31427e1d2cec1853534f05afb32e5094b1a76/src/index.ts#L93)
 
 This function returns a **shallow copy** or "clone" of _any `value`_
 (including, for instance, functions). If `value` cannot be cloned, it will be

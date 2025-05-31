@@ -12,6 +12,8 @@
 
 ## Functions
 
+- [isEmptyRecord](functions/isEmptyRecord.md)
+- [isRecord](functions/isRecord.md)
 - [safeDeepClone](functions/safeDeepClone.md)
 - [safeShallowClone](functions/safeShallowClone.md)
 - [toss](functions/toss.md)
