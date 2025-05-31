@@ -49,7 +49,7 @@ export function safeDeepClone<T>(value: T, options?: SafeDeepCloneOptions): T {
 
   const attempt = clone(value);
 
-  if (isEmptyObject(attempt) && !isEmptyObject(value)) {
+  if (isEmptyRecord(attempt) && !isEmptyRecord(value)) {
     // ? If we reached this point, it was `value` could not be cloned
     return value;
   }
@@ -93,20 +93,43 @@ export function safeDeepClone<T>(value: T, options?: SafeDeepCloneOptions): T {
 export function safeShallowClone<T>(value: T): T {
   const attempt = clone(value);
 
-  if (isEmptyObject(attempt) && !isEmptyObject(value)) {
+  if (isEmptyRecord(attempt) && !isEmptyRecord(value)) {
     return value;
   }
 
   return attempt;
 }
 
-function isEmptyObject(o: unknown) {
+/**
+ * This type guard function accepts any type and returns `true` if it is a plain
+ * record object and not an array, class, primitive, or some other type.
+ */
+export function isRecord(o: unknown): o is Record<PropertyKey, unknown> {
   if (!o || typeof o !== 'object') {
     return false;
   }
 
-  // ? Essentially `instanceof Object` that doesn't crawl the prototype chain
-  if (Object.getPrototypeOf(o) !== Object.prototype) {
+  const oPrototype = Object.getPrototypeOf(o);
+
+  if (
+    // ? Sometimes objects are created using Object.create(null)
+    oPrototype !== null &&
+    // ? Essentially `instanceof Object` that doesn't crawl the prototype chain
+    oPrototype !== Object.prototype
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * This type guard function accepts any type and returns `true` if
+ * {@link isRecord} returns `true` and `o` contains no own property names
+ * (including symbols).
+ */
+export function isEmptyRecord(o: unknown): o is Record<PropertyKey, unknown> {
+  if (!isRecord(o)) {
     return false;
   }
 

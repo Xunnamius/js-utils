@@ -1,6 +1,6 @@
 // * These tests ensure the exported interfaces under test function as expected.
 
-import { safeDeepClone, safeShallowClone } from 'universe';
+import { isEmptyRecord, isRecord, safeDeepClone, safeShallowClone } from 'universe';
 
 const $symbol = Symbol('symbol');
 
@@ -151,5 +151,43 @@ describe('::safeShallowClone', () => {
 
     expect(safeShallowClone(bigInt)).toBe(bigInt);
     expect(safeShallowClone(fn)).toBe(fn);
+  });
+});
+
+describe('::isRecord', () => {
+  it('returns true iff argument is a record', async () => {
+    expect.hasAssertions();
+
+    expect(isRecord(0)).toBeFalse();
+    expect(isRecord(BigInt(10))).toBeFalse();
+    expect(isRecord([{ a: 5 }])).toBeFalse();
+    expect(isRecord('object')).toBeFalse();
+    expect(isRecord(null)).toBeFalse();
+    expect(isRecord(true)).toBeFalse();
+    expect(isRecord(false)).toBeFalse();
+    expect(isRecord(Number.NaN)).toBeFalse();
+    expect(isRecord(new Intl.Collator())).toBeFalse();
+
+    expect(isRecord({})).toBeTrue();
+    expect(isRecord({ a: 5 })).toBeTrue();
+  });
+});
+
+describe('::isEmptyRecord', () => {
+  it('returns true iff argument is an empty record', async () => {
+    expect.hasAssertions();
+
+    expect(isEmptyRecord(0)).toBeFalse();
+    expect(isEmptyRecord(BigInt(10))).toBeFalse();
+    expect(isEmptyRecord([{ a: 5 }])).toBeFalse();
+    expect(isEmptyRecord('object')).toBeFalse();
+    expect(isEmptyRecord(null)).toBeFalse();
+    expect(isEmptyRecord(true)).toBeFalse();
+    expect(isEmptyRecord(false)).toBeFalse();
+    expect(isEmptyRecord(Number.NaN)).toBeFalse();
+    expect(isEmptyRecord(new Intl.Collator())).toBeFalse();
+    expect(isEmptyRecord({ a: 5 })).toBeFalse();
+
+    expect(isEmptyRecord({})).toBeTrue();
   });
 });
