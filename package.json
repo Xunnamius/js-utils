@@ -80,7 +80,7 @@
   },
   "devDependencies": {
     "@-xun/fs": "^1.0.0",
-    "@-xun/symbiote": "^3.4.1",
+    "@-xun/symbiote": "^4.1.0",
     "@types/lodash.clone": "^4.5.9",
     "@types/lodash.clonedeepwith": "^4.5.9",
     "rejoinder": "^1.2.5"
