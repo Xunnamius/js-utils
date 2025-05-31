@@ -73,7 +73,7 @@
     "test:packages:all:unit": "symbiote test --env NODE_NO_WARNINGS=1 --tests unit type --scope unlimited --coverage"
   },
   "dependencies": {
-    "core-js": "^3.41.0",
+    "core-js": "^3.42.0",
     "lodash.clone": "^4.5.0",
     "lodash.clonedeepwith": "^4.5.0",
     "toss-expression": "^0.1.2"
