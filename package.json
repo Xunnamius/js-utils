@@ -79,7 +79,7 @@
     "toss-expression": "^0.1.2"
   },
   "devDependencies": {
-    "@-xun/fs": "^1.0.0",
+    "@-xun/fs": "^2.0.0",
     "@-xun/symbiote": "^4.1.0",
     "@types/lodash.clone": "^4.5.9",
     "@types/lodash.clonedeepwith": "^4.5.9",
